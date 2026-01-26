@@ -1,5 +1,6 @@
 package com.example.rickmortyapp.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -10,7 +11,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rickmortyapp.databinding.ActivityMainBinding
 import com.example.rickmortyapp.presentation.domain.adapter.RickMortyAdapter
 import com.example.rickmortyapp.presentation.viewmodel.RickUiState
@@ -19,13 +19,14 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel: RickViewModel by viewModel()
-    private val adapter = RickMortyAdapter()
+    private val adapter = RickMortyAdapter { id ->
+        startActivity(Intent(this, DetailActivity::class.java).apply { putExtra("ID", id) })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
 
@@ -35,31 +36,16 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        setupRecyclerView()
-        observeViewModel()
-    }
+        binding.rvCharacters.adapter = adapter
 
-    private fun setupRecyclerView() {
-        binding.rvCharacters.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
-        }
-    }
-
-    private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     binding.progressBar.isVisible = state is RickUiState.Loading
                     
-                    when (state) {
-                        is RickUiState.Success -> {
-                            adapter.submitList(state.data)
-                        }
-                        is RickUiState.Error -> {
-                            Toast.makeText(this@MainActivity, state.message, Toast.LENGTH_SHORT).show()
-                        }
-                        else -> {}
+                    (state as? RickUiState.Success)?.let { adapter.submitList(it.data) }
+                    (state as? RickUiState.Error)?.let { 
+                        Toast.makeText(this@MainActivity, it.message, Toast.LENGTH_SHORT).show() 
                     }
                 }
             }

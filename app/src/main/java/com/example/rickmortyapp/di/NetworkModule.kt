@@ -4,6 +4,8 @@ import com.example.rickmortyapp.data.api.Api
 import com.example.rickmortyapp.data.repository.RickRepositoryImpl
 import com.example.rickmortyapp.domain.repository.RickRepositoryInterface
 import com.example.rickmortyapp.domain.usecase.GetCharactersUseCase
+import com.example.rickmortyapp.domain.usecase.GetSingleCharacterUseCase
+import com.example.rickmortyapp.presentation.viewmodel.DetailViewModel
 import com.example.rickmortyapp.presentation.viewmodel.RickViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -38,6 +40,8 @@ val networkModule = module {
     single<RickRepositoryInterface> { RickRepositoryImpl(get()) }
     
     factory { GetCharactersUseCase(get()) }
+    factory { GetSingleCharacterUseCase(get()) }
 
     viewModel { RickViewModel(get()) }
+    viewModel { DetailViewModel(get()) }
 }
