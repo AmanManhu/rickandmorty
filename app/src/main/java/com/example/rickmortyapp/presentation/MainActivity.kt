@@ -3,7 +3,7 @@ package com.example.rickmortyapp.presentation
 import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import com.example.rickmortyapp.databinding.ActivityMainBinding
-import com.example.rickmortyapp.presentation.domain.adapter.RickMortyAdapter
+import com.example.rickmortyapp.presentation.domain.adapter.PagingRickMortyAdapter
 import com.example.rickmortyapp.presentation.viewmodel.RickViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
 ) {
     private val viewModel: RickViewModel by viewModel()
     
-    private val adapter = RickMortyAdapter { id ->
+    private val adapter = PagingRickMortyAdapter { id ->
         startActivity(Intent(this, DetailActivity::class.java).apply { putExtra("ID", id) })
     }
 

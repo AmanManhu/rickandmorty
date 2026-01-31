@@ -9,7 +9,7 @@ import coil.load
 import com.example.rickmortyapp.domain.model.Character
 import com.example.rickmortyapp.databinding.ItemRickListBinding
 
-class RickMortyAdapter(private val onItemClick: (Int) -> Unit) : PagingDataAdapter<Character, RickMortyAdapter.ViewHolder>(RickDiffCallback()) {
+class PagingRickMortyAdapter(private val onItemClick: (Int) -> Unit) : PagingDataAdapter<Character, PagingRickMortyAdapter.ViewHolder>(RickDiffCallback()) {
 
     class ViewHolder(private val binding: ItemRickListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Character, onItemClick: (Int) -> Unit) {
