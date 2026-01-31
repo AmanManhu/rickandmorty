@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.okhttp.logging)
 
     implementation(libs.koin.android)
+    implementation(libs.androidx.paging.runtime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

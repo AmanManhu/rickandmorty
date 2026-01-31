@@ -2,14 +2,14 @@ package com.example.rickmortyapp.presentation.domain.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.rickmortyapp.domain.model.Character
 import com.example.rickmortyapp.databinding.ItemRickListBinding
 
-class RickMortyAdapter(private val onItemClick: (Int) -> Unit) : ListAdapter<Character, RickMortyAdapter.ViewHolder>(RickDiffCallback()) {
+class RickMortyAdapter(private val onItemClick: (Int) -> Unit) : PagingDataAdapter<Character, RickMortyAdapter.ViewHolder>(RickDiffCallback()) {
 
     class ViewHolder(private val binding: ItemRickListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Character, onItemClick: (Int) -> Unit) {
@@ -30,8 +30,7 @@ class RickMortyAdapter(private val onItemClick: (Int) -> Unit) : ListAdapter<Cha
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item, onItemClick)
+        getItem(position)?.let { holder.bind(it, onItemClick) }
     }
 
     class RickDiffCallback : DiffUtil.ItemCallback<Character>() {

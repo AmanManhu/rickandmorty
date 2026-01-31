@@ -1,12 +1,12 @@
 package com.example.rickmortyapp.domain.usecase
 
-import com.example.rickmortyapp.data.Either
+import androidx.paging.PagingData
 import com.example.rickmortyapp.domain.model.Character
 import com.example.rickmortyapp.domain.repository.RickRepositoryInterface
 import kotlinx.coroutines.flow.Flow
 
 class GetCharactersUseCase(private val repository: RickRepositoryInterface) {
-    operator fun invoke(): Flow<Either<String, List<Character>>> {
+    operator fun invoke(): Flow<PagingData<Character>> {
         return repository.getCharacters()
     }
 }
